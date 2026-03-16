@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bhoomika Sathish Rao — Electronics & Embedded Systems Engineer</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e0e0e;
+    --surface: #161616;
+    --surface2: #1e1e1e;
+    --border: #2a2a2a;
+    --accent: #c0392b;
+    --accent2: #e74c3c;
+    --gold: #d4a853;
+    --text: #f0ede8;
+    --muted: #888;
+    --subtle: #444;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ── NOISE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 1.2rem 2.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+    background: rgba(14,14,14,0.92);
+    backdrop-filter: blur(12px);
+  }
+
+  .nav-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.1rem;
+    letter-spacing: 0.02em;
+    color: var(--text);
+  }
+
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.82rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--accent2); }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 8rem 2.5rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 60px 60px;
+    opacity: 0.3;
+    mask-image: radial-gradient(ellipse at center, black 20%, transparent 80%);
+  }
+
+  .hero-content { position: relative; max-width: 900px; }
+
+  .hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent2);
+    border: 1px solid var(--accent);
+    padding: 0.3rem 0.8rem;
+    border-radius: 2px;
+    margin-bottom: 2rem;
+    opacity: 0;
+    animation: fadeUp 0.6s 0.2s forwards;
+  }
+
+  .hero-tag::before {
+    content: '';
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent2);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  .hero h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(3rem, 7vw, 6rem);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 0.7s 0.3s forwards;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--accent2);
+  }
+
+  .hero-sub {
+    font-size: 1.1rem;
+    color: var(--muted);
+    max-width: 560px;
+    margin-bottom: 2.5rem;
+    opacity: 0;
+    animation: fadeUp 0.7s 0.4s forwards;
+    line-height: 1.8;
+  }
+
+  .hero-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-bottom: 2.5rem;
+    opacity: 0;
+    animation: fadeUp 0.7s 0.5s forwards;
+  }
+
+  .badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    padding: 0.3rem 0.8rem;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+  }
+
+  .badge.highlight {
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+
+  .hero-cta {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeUp 0.7s 0.6s forwards;
+  }
+
+  .btn {
+    display: inline-block;
+    padding: 0.8rem 1.8rem;
+    font-size: 0.82rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 2px;
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: white;
+    border: 1px solid var(--accent);
+  }
+  .btn-primary:hover { background: var(--accent2); }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+  .btn-outline:hover { border-color: var(--muted); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── SECTIONS ── */
+  section { padding: 5rem 2.5rem; max-width: 1100px; margin: 0 auto; }
+
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent2);
+    margin-bottom: 1rem;
+  }
+
+  .section-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    line-height: 1.1;
+    margin-bottom: 3rem;
+  }
+
+  /* ── ABOUT ── */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+  }
+
+  .about-text p {
+    color: var(--muted);
+    margin-bottom: 1.2rem;
+    line-height: 1.9;
+  }
+
+  .about-text p strong { color: var(--text); }
+
+  .rtw-box {
+    border: 1px solid var(--accent);
+    border-radius: 4px;
+    padding: 1.2rem 1.5rem;
+    margin-top: 1.5rem;
+    background: rgba(192, 57, 43, 0.06);
+  }
+
+  .rtw-box p {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--accent2) !important;
+    letter-spacing: 0.03em;
+    margin: 0 !important;
+  }
+
+  .skills-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+
+  .skill-row { display: flex; flex-direction: column; gap: 0.4rem; }
+
+  .skill-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .skill-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+
+  .skill-tag {
+    font-size: 0.75rem;
+    padding: 0.2rem 0.6rem;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    color: var(--text);
+  }
+
+  /* ── PROJECTS ── */
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(480px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .project-card {
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 2rem;
+    background: var(--surface);
+    transition: border-color 0.2s, transform 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .project-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s;
+  }
+
+  .project-card:hover { border-color: var(--subtle); transform: translateY(-2px); }
+  .project-card:hover::before { transform: scaleX(1); }
+
+  .project-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--accent2);
+    letter-spacing: 0.15em;
+    margin-bottom: 1rem;
+  }
+
+  .project-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.4rem;
+    margin-bottom: 0.4rem;
+    line-height: 1.2;
+  }
+
+  .project-inst {
+    font-size: 0.78rem;
+    color: var(--muted);
+    margin-bottom: 1.2rem;
+    font-style: italic;
+  }
+
+  .project-desc {
+    color: var(--muted);
+    font-size: 0.88rem;
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+  }
+
+  .project-tech {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .tech-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    padding: 0.2rem 0.6rem;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    color: var(--subtle);
+    letter-spacing: 0.05em;
+  }
+
+  .project-outcome {
+    border-top: 1px solid var(--border);
+    padding-top: 1rem;
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+
+  .outcome-item {
+    display: flex;
+    gap: 0.6rem;
+    align-items: flex-start;
+    margin-bottom: 0.4rem;
+  }
+
+  .outcome-item::before {
+    content: '·';
+    color: var(--accent2);
+    flex-shrink: 0;
+    font-size: 0.75rem;
+    margin-top: 0.1rem;
+  }
+
+  .highlight-stat {
+    display: inline-block;
+    background: rgba(192, 57, 43, 0.12);
+    border: 1px solid var(--accent);
+    color: var(--accent2);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    padding: 0.1rem 0.5rem;
+    border-radius: 2px;
+    margin-left: 0.3rem;
+  }
+
+  /* ── EXPERIENCE ── */
+  .exp-list { display: flex; flex-direction: column; gap: 0; }
+
+  .exp-item {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 2rem;
+    padding: 2rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .exp-item:last-child { border-bottom: none; }
+
+  .exp-date {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+    padding-top: 0.2rem;
+  }
+
+  .exp-role {
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-bottom: 0.2rem;
+  }
+
+  .exp-company {
+    font-size: 0.82rem;
+    color: var(--accent2);
+    margin-bottom: 0.8rem;
+    font-style: italic;
+  }
+
+  .exp-desc {
+    font-size: 0.83rem;
+    color: var(--muted);
+    line-height: 1.8;
+  }
+
+  /* ── CONTACT ── */
+  .contact-section {
+    border-top: 1px solid var(--border);
+    padding: 5rem 2.5rem;
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .contact-links {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin-top: 2.5rem;
+  }
+
+  .contact-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--muted);
+    text-decoration: none;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    transition: color 0.2s;
+  }
+
+  .contact-link:hover { color: var(--accent2); }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 2rem;
+    border-top: 1px solid var(--border);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--subtle);
+    letter-spacing: 0.1em;
+  }
+
+  /* ── DIVIDER ── */
+  .divider {
+    width: 100%;
+    height: 1px;
+    background: var(--border);
+    margin: 0 2.5rem;
+    max-width: calc(100% - 5rem);
+  }
+
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    .hero { padding: 6rem 1.5rem 3rem; }
+    section { padding: 3rem 1.5rem; }
+    .about-grid { grid-template-columns: 1fr; gap: 2rem; }
+    .projects-grid { grid-template-columns: 1fr; }
+    .exp-item { grid-template-columns: 1fr; gap: 0.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <span class="nav-name">Bhoomika S. Rao</span>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-tag">Available for Graduate Roles</div>
+    <h1>Electronics &amp;<br><em>Embedded Systems</em><br>Engineer</h1>
+    <p class="hero-sub">MSc High Commendation — Nottingham Trent University. Hands-on experience in embedded firmware, IoT development, PCB assembly, and circuit validation. Based in Nottingham, UK.</p>
+    <div class="hero-badges">
+      <span class="badge highlight">MSc High Commendation</span>
+      <span class="badge">STM32 · Arduino · Embedded C++</span>
+      <span class="badge">PCB Design · Test & Validation</span>
+      <span class="badge">Right to Work — UK Graduate Visa</span>
+    </div>
+    <div class="hero-cta">
+      <a href="#projects" class="btn btn-primary">View Projects</a>
+      <a href="https://linkedin.com/in/bhoomika-sathish-rao-030095229" target="_blank" class="btn btn-outline">LinkedIn</a>
+      <a href="https://github.com/bhoomika-rao2k" target="_blank" class="btn btn-outline">GitHub</a>
+    </div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-label">About</div>
+  <div class="section-title">Engineer who<br>builds real things</div>
+  <div class="about-grid">
+    <div class="about-text">
+      <p>I'm an electronics engineer who genuinely enjoys getting hands-on with hardware — building prototypes, running tests, and working through the kind of problems where you need to pick up an oscilloscope and actually figure out what's going on.</p>
+      <p>I completed my <strong>MSc Engineering Electronics with High Commendation</strong> at Nottingham Trent University in 2024. My most meaningful experience has come through building real embedded systems — from IoT security prototypes achieving <strong>90% attack detection rates</strong>, to voice-activated automation systems showcased at NTU's university exhibition.</p>
+      <p>I've had industry exposure through three internships across embedded development at Cyient DLM, aerospace manufacturing at Rangsons Aerospace, and prototype assembly at Tycoon Innovative Technology.</p>
+      <p>I'm open to roles in <strong>UK, Netherlands, and Germany</strong>.</p>
+      <div class="rtw-box">
+        <p>Right to work in the UK on Graduate Route Visa — no employer sponsorship required until March 2027. Actively seeking a role with a path to Skilled Worker Visa sponsorship.</p>
+      </div>
+    </div>
+    <div class="skills-grid">
+      <div class="skill-row">
+        <span class="skill-label">Embedded & Microcontrollers</span>
+        <div class="skill-tags">
+          <span class="skill-tag">STM32</span>
+          <span class="skill-tag">Arduino Mega/UNO</span>
+          <span class="skill-tag">Embedded C/C++</span>
+          <span class="skill-tag">Sensor Integration</span>
+          <span class="skill-tag">Firmware Debugging</span>
+        </div>
+      </div>
+      <div class="skill-row">
+        <span class="skill-label">Electronics & PCB</span>
+        <div class="skill-tags">
+          <span class="skill-tag">OrCAD</span>
+          <span class="skill-tag">SolidWorks PCB</span>
+          <span class="skill-tag">PCB Assembly (SMD/RoHS)</span>
+          <span class="skill-tag">Circuit Design</span>
+          <span class="skill-tag">Signal Analysis</span>
+        </div>
+      </div>
+      <div class="skill-row">
+        <span class="skill-label">Test & Validation</span>
+        <div class="skill-tags">
+          <span class="skill-tag">Oscilloscope</span>
+          <span class="skill-tag">Multimeter</span>
+          <span class="skill-tag">Board-level Testing</span>
+          <span class="skill-tag">Functional Validation</span>
+        </div>
+      </div>
+      <div class="skill-row">
+        <span class="skill-label">Communication Protocols</span>
+        <div class="skill-tags">
+          <span class="skill-tag">I2C</span>
+          <span class="skill-tag">SPI</span>
+          <span class="skill-tag">UART</span>
+          <span class="skill-tag">Bluetooth HC-05</span>
+          <span class="skill-tag">TCP/IP</span>
+        </div>
+      </div>
+      <div class="skill-row">
+        <span class="skill-label">Tools & Simulation</span>
+        <div class="skill-tags">
+          <span class="skill-tag">MATLAB</span>
+          <span class="skill-tag">Simulink</span>
+          <span class="skill-tag">AutoCAD Electrical</span>
+          <span class="skill-tag">Tinkercad</span>
+          <span class="skill-tag">Visual Studio</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-label">Projects</div>
+  <div class="section-title">What I've built</div>
+  <div class="projects-grid">
+
+    <!-- Project 1 -->
+    <div class="project-card">
+      <div class="project-num">MSc Final Thesis · Nottingham Trent University · 2024</div>
+      <div class="project-title">Voice-Activated Home Automation System</div>
+      <div class="project-inst">Nottingham Trent University | MSc Final Thesis</div>
+      <p class="project-desc">Designed and built a working embedded home automation system on Arduino Mega — integrating PIR motion sensor, capacitive touch sensor, HC-05 Bluetooth module, and I2C LCD for real-time feedback, with voice commands processed via an Android app. Built and validated from scratch, showcased at NTU University Exhibition.</p>
+      <div class="project-tech">
+        <span class="tech-tag">Arduino Mega</span>
+        <span class="tech-tag">Embedded C++</span>
+        <span class="tech-tag">HC-05 Bluetooth</span>
+        <span class="tech-tag">PIR Sensor</span>
+        <span class="tech-tag">I2C LCD</span>
+        <span class="tech-tag">Relay Control</span>
+      </div>
+      <div class="project-outcome">
+        <div class="outcome-item">Low-cost scalable system — local processing, no cloud dependency</div>
+        <div class="outcome-item">1–2 second response time across all tested conditions</div>
+        <div class="outcome-item">Showcased at NTU University Exhibition — positive feedback for real-world relevance</div>
+      </div>
+    </div>
+
+    <!-- Project 2 -->
+    <div class="project-card">
+      <div class="project-num">BEng Final Year Thesis · Maharaja Institute of Technology · 2022</div>
+      <div class="project-title">Sybil Watch — IoT Security in Smart Healthcare</div>
+      <div class="project-inst">Maharaja Institute of Technology | BEng Final Year Thesis</div>
+      <p class="project-desc">Built a lightweight real-time Sybil attack detection system for IoT healthcare networks in C#/.NET — detecting malicious nodes that impersonate multiple identities to intercept patient data. Implemented Hop Count Filtering, arrival time threshold analysis, flood detection, and MAC/IP address mismatch detection.</p>
+      <div class="project-tech">
+        <span class="tech-tag">C# .NET</span>
+        <span class="tech-tag">TCP/IP</span>
+        <span class="tech-tag">Socket Programming</span>
+        <span class="tech-tag">GSM SMS Alerts</span>
+        <span class="tech-tag">Visual Studio</span>
+      </div>
+      <div class="project-outcome">
+        <div class="outcome-item">
+          Achieved 90% detection rate
+          <span class="highlight-stat">vs 60% existing RPC</span>
+        </div>
+        <div class="outcome-item">My contribution: Intrusion Detection Module, packet parsing, GSM SMS alerting</div>
+        <div class="outcome-item">Fake data served to attackers — stops attack without alerting attacker</div>
+      </div>
+    </div>
+
+    <!-- Project 3 -->
+    <div class="project-card">
+      <div class="project-num">Nottingham Trent University · Embedded Systems Module · 2024</div>
+      <div class="project-title">Traffic Light Control System — Pedestrian & Night Mode</div>
+      <div class="project-inst">Nottingham Trent University | Embedded Systems Module</div>
+      <p class="project-desc">Designed and implemented an intelligent adaptive traffic light system on Arduino UNO — integrating ultrasonic sensor (SRF05) for pedestrian detection and LDR for ambient light sensing. Operates across three real-time modes: Regular, Pedestrian, and Night Mode, with safety buzzer and dynamic signal timing.</p>
+      <div class="project-tech">
+        <span class="tech-tag">Arduino UNO</span>
+        <span class="tech-tag">Embedded C</span>
+        <span class="tech-tag">Ultrasonic SRF05</span>
+        <span class="tech-tag">LDR</span>
+        <span class="tech-tag">Tinkercad</span>
+        <span class="tech-tag">Breadboard Prototype</span>
+      </div>
+      <div class="project-outcome">
+        <div class="outcome-item">Adaptive 3-mode operation validated on breadboard and Tinkercad simulation</div>
+        <div class="outcome-item">Improved pedestrian safety with audible and visual real-time alerts</div>
+        <div class="outcome-item">Demonstrated real-time embedded control and hardware-software synchronisation</div>
+      </div>
+    </div>
+
+    <!-- Project 4 -->
+    <div class="project-card">
+      <div class="project-num">Nottingham Trent University · Embedded Systems Module · 2024</div>
+      <div class="project-title">Embedded Sensor Network — Industrial Automation</div>
+      <div class="project-inst">Nottingham Trent University | Embedded Systems Module</div>
+      <p class="project-desc">Built a multi-node wireless sensor network for industrial monitoring using a master-slave Bluetooth architecture on Arduino Mega — integrating DHT11, MPU6050, PIR, water level, and sound sensors into a unified sensing node with real-time LCD display and threshold-based anomaly detection.</p>
+      <div class="project-tech">
+        <span class="tech-tag">Arduino Mega</span>
+        <span class="tech-tag">Embedded C++</span>
+        <span class="tech-tag">Bluetooth HC-05</span>
+        <span class="tech-tag">DHT11</span>
+        <span class="tech-tag">MPU6050</span>
+        <span class="tech-tag">I2C LCD</span>
+      </div>
+      <div class="project-outcome">
+        <div class="outcome-item">5-sensor unified monitoring node — temperature, humidity, vibration, motion, water</div>
+        <div class="outcome-item">Wireless master-slave Bluetooth data transmission with real-time LCD display</div>
+        <div class="outcome-item">Automated buzzer and LCD alerts on anomaly detection</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="section-label">Experience</div>
+  <div class="section-title">Where I've worked</div>
+  <div class="exp-list">
+
+    <div class="exp-item">
+      <div class="exp-date">Jan 2023 — Apr 2023</div>
+      <div>
+        <div class="exp-role">Embedded Systems Intern</div>
+        <div class="exp-company">Cyient DLM Pvt Ltd, India</div>
+        <p class="exp-desc">Gained exposure to STM32-based electronic control modules during board bring-up and firmware testing, supporting the engineering team in debugging and validation activities. Used oscilloscopes and lab instruments for signal verification on PCB assemblies. Worked within an ISO9001 production environment.</p>
+      </div>
+    </div>
+
+    <div class="exp-item">
+      <div class="exp-date">Apr 2022 — Jun 2022</div>
+      <div>
+        <div class="exp-role">Electronics Intern</div>
+        <div class="exp-company">Rangsons Aerospace Pvt Ltd, India</div>
+        <p class="exp-desc">Supported aerospace-grade component fabrication within a quality-controlled manufacturing environment. Contributed to process improvement activities that reduced inspection cycle time, and assisted with cross-team documentation between engineering and production.</p>
+      </div>
+    </div>
+
+    <div class="exp-item">
+      <div class="exp-date">Sep 2021 — Nov 2021</div>
+      <div>
+        <div class="exp-role">Embedded Prototyping Intern</div>
+        <div class="exp-company">Tycoon Innovative Technology, India</div>
+        <p class="exp-desc">Most hands-on internship — assembled and tested real automation prototypes end-to-end including sensor integration, control panel wiring, and PCB assembly using SMD and RoHS-compliant components. Actively involved in firmware debugging and schematic review sessions. This is where the build-test-debug cycle clicked for me.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CONTACT -->
+<div class="contact-section" id="contact">
+  <div class="section-label" style="text-align:center;">Contact</div>
+  <div class="section-title" style="font-size:2rem;">Let's work together</div>
+  <p style="color:var(--muted); font-size:0.9rem; line-height:1.9;">I'm actively seeking graduate roles in Embedded Systems, Hardware Design, Test & Validation, or Systems Engineering in the UK, Netherlands, and Germany. Full right to work — no sponsorship needed until March 2027.</p>
+  <div class="contact-links">
+    <a href="mailto:bhoomikasrao2k@gmail.com" class="contact-link">
+      bhoomikasrao2k@gmail.com
+    </a>
+    <a href="https://linkedin.com/in/bhoomika-sathish-rao-030095229" target="_blank" class="contact-link">
+      LinkedIn
+    </a>
+    <a href="https://github.com/bhoomika-rao2k" target="_blank" class="contact-link">
+      GitHub
+    </a>
+    <a href="tel:+447778071365" class="contact-link">
+      +44 7778071365
+    </a>
+  </div>
+</div>
+
+<footer>
+  Bhoomika Sathish Rao — Electronics & Embedded Systems Engineer — Nottingham, UK
+</footer>
+
+</body>
+</html>
